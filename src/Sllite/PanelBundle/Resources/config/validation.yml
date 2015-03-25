@@ -1,0 +1,18 @@
+Sllite\PanelBundle\Entity\Site:
+    properties:
+        name:
+            - NotBlank: ~
+            - NotNull: ~
+            - Length:
+                min: 3
+                max: 255
+                minMessage: "Вы ввели очень короткое имя"
+                maxMessage: "Вы ввели очень длинное имя"
+        domain:
+            - NotBlank: ~
+            - NotNull: ~
+            - Length:
+                min: 1
+                max: 255
+                minMessage: "Вы ввели очень короткое доменное имя"
+                maxMessage: "Вы ввели очень длинное доменное имя"

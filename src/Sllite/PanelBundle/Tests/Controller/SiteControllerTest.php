@@ -2,6 +2,7 @@
 
 namespace Sllite\PanelBundle\Tests\Controller;
 
+use FOS\RestBundle\Util\Codes;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Sllite\PanelBundle\Model\SiteInterface;
 use Sllite\PanelBundle\Tests\Fixtures\Entity\LoadSiteData;
@@ -42,7 +43,6 @@ class SiteControllerTest extends WebTestCase
         $this->assertArrayHasKey('id', $decoded);
     }
 
-
     public function testGetSiteNotFound()
     {
         $this->client->request(
@@ -52,5 +52,33 @@ class SiteControllerTest extends WebTestCase
         );
 
         $this->assertTrue($this->client->getResponse()->isNotFound());
+    }
+
+    public function testCreateSiteSuccessful()
+    {
+        $this->client->request(
+            'POST',
+            $this->getUrl('rest_post_site', ['_format' => 'json']),
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"name" : "New site", "domain" : "new-site.local"}'
+        );
+
+        $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testCreateSiteFail()
+    {
+        $this->client->request(
+            'POST',
+            $this->getUrl('rest_post_site', ['_format' => 'json']),
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"name" : "New site", "domains" : "test.local"}'
+        );
+
+        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
     }
 }

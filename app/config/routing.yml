@@ -1,6 +1,6 @@
 sllite_panel:
     type: rest
-    prefix:   /rest
+    prefix:   /
     resource: "@SllitePanelBundle/Resources/config/routes.yml"
 
 app:

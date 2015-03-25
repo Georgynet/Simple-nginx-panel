@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Форма для сущности "сайт".
+ */
 class SiteType extends AbstractType
 {
     /**
@@ -35,6 +38,6 @@ class SiteType extends AbstractType
      */
     public function getName()
     {
-        return 'sllite_panelbundle_site';
+        return '';
     }
 }

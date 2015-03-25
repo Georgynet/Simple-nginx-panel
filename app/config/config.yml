@@ -11,7 +11,7 @@ framework:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
     form:            ~
-    csrf_protection: ~
+    csrf_protection: false
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
@@ -94,4 +94,3 @@ fos_rest:
     access_denied_listener:
         json: true
     body_listener: true
-    disable_csrf_role: ROLE_API

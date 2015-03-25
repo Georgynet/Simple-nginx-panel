@@ -16,4 +16,12 @@ interface SiteHandlerInterface
      * @return SiteInterface
      */
     public function get($id);
+
+    /**
+     * Создаёт новый сайт.
+     *
+     * @param array $parameters
+     * @return SiteInterface
+     */
+    public function post(array $parameters);
 }

@@ -8,6 +8,7 @@
         <service id="sllite_panel.site.handler" class="Sllite\PanelBundle\Handler\SiteHandler">
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument>Sllite\PanelBundle\Entity\Site</argument>
+            <argument type="service" id="form.factory"></argument>
         </service>
     </services>
 
