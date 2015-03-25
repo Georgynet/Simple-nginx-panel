@@ -67,6 +67,30 @@ class SiteHandler implements SiteHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function put(SiteInterface $site, array $parameters)
+    {
+        return $this->processForm(
+            $this->createSite(),
+            $parameters,
+            'PUT'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function patch(SiteInterface $site, array $parameters)
+    {
+        return $this->processForm(
+            $this->createSite(),
+            $parameters,
+            'PATCH'
+        );
+    }
+
+    /**
      * Обработка формы.
      *
      * @param SiteInterface $site

@@ -38,6 +38,8 @@ class SiteController extends FOSRestController
      *
      * @param Request $request
      * @return View|array|null
+     *
+     * @throws InvalidFormException в случае, если форма невалидная
      */
     public function postSiteAction(Request $request)
     {
@@ -54,6 +56,52 @@ class SiteController extends FOSRestController
                     '_format' => $request->get('_format')
                 ],
                 Codes::HTTP_CREATED
+            );
+        } catch (InvalidFormException $e) {
+            return $e->getForm();
+        }
+    }
+
+    /**
+     * Обновляет сущесвующий сайт или создаёт новый.
+     *
+     * @Annotations\View(
+     *  template = "SllitePanelBundle:Site:editSite.html.twig",
+     *  templateVar = "form"
+     * )
+     *
+     * @param Request $request
+     * @param int $id
+     * @return View|array|null
+     *
+     * @throws InvalidFormException в случае, если форма невалидная
+     */
+    public function putSiteAction(Request $request, $id)
+    {
+        try {
+            $site = $this->container->get('sllite_panel.site.handler')->get($id);
+
+            if ($site instanceof SiteInterface) {
+                $statusCode = Codes::HTTP_NO_CONTENT;
+                $this->container->get('sllite_panel.site.handler')->put(
+                    $site,
+                    $request->request->all()
+                );
+
+            } else {
+                $statusCode = Codes::HTTP_CREATED;
+                $site = $this->container->get('sllite_panel.site.handler')->post(
+                    $request->request->all()
+                );
+            }
+
+            return $this->routeRedirectView(
+                'rest_get_site',
+                [
+                    'id' => $site->getId(),
+                    '_format' => $request->get('_format')
+                ],
+                $statusCode
             );
         } catch (InvalidFormException $e) {
             return $e->getForm();
