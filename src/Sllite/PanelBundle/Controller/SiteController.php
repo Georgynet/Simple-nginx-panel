@@ -110,6 +110,43 @@ class SiteController extends FOSRestController
     }
 
     /**
+     * Редактирует сайт.
+     *
+     * @Annotations\View(
+     *  template="SllitePanelBundel:Site:editSite.html.twiig",
+     *  templateVar="form"
+     * )
+     *
+     * @param Request $request
+     * @param int $id
+     * @return View|array|null
+     *
+     * @throws InvalidFormException в случае, если форма невалидная
+     * @throws NotFoundHttpException в случае, если редактируемый сайт не существует
+     */
+    public function patchSiteAction(Request $request, $id)
+    {
+        try {
+            /** @var SiteInterface $site */
+            $site = $this->container->get('sllite_panel.site.handler')->patch(
+                $this->getIfExist($id),
+                $request->request->all()
+            );
+
+            return $this->routeRedirectView(
+                'rest_get_site',
+                [
+                    'id' => $site->getId(),
+                    '_format' => $request->get('_format')
+                ],
+                Codes::HTTP_NO_CONTENT
+            );
+        } catch (InvalidFormException $e) {
+            return $e->getForm();
+        }
+    }
+
+    /**
      * Возвращает форму для создания нового сайта.
      *
      * @Annotations\View()

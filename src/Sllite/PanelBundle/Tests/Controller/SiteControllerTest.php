@@ -155,4 +155,48 @@ class SiteControllerTest extends WebTestCase
             $this->client->getResponse()->getStatusCode()
         );
     }
+
+    public function testPatchSite()
+    {
+        $fixtures = ['Sllite\PanelBundle\Tests\Fixtures\Entity\LoadSiteData'];
+        $this->loadFixtures($fixtures);
+        $sites = LoadSiteData::$sites;
+
+        /** @var SiteInterface $site */
+        $site = array_pop($sites);
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('rest_get_site', ['id' => $site->getId(), '_format' => 'json']),
+            ['ACCEPT' => 'application/json']
+        );
+
+        $this->assertEquals(
+            Codes::HTTP_OK,
+            $this->client->getResponse()->getStatusCode(),
+            $this->client->getResponse()->getContent()
+        );
+
+        $this->client->request(
+            'PATCH',
+            $this->getUrl('rest_patch_site', ['id' => $site->getId(), '_format' => 'json']),
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"name" : "name-after-patch"}'
+        );
+
+        $this->assertEquals(
+            Codes::HTTP_NO_CONTENT,
+            $this->client->getResponse()->getStatusCode()
+        );
+
+        $this->assertTrue(
+            $this->client->getResponse()->headers->contains(
+                'Location',
+                'http://localhost' . $this->getUrl('rest_get_site', ['id' => $site->getId(), '_format' => 'json'])
+            ),
+            $this->client->getResponse()->headers
+        );
+    }
 }

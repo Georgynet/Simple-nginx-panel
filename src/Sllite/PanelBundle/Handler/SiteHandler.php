@@ -72,7 +72,7 @@ class SiteHandler implements SiteHandlerInterface
     public function put(SiteInterface $site, array $parameters)
     {
         return $this->processForm(
-            $this->createSite(),
+            $site,
             $parameters,
             'PUT'
         );
@@ -84,7 +84,7 @@ class SiteHandler implements SiteHandlerInterface
     public function patch(SiteInterface $site, array $parameters)
     {
         return $this->processForm(
-            $this->createSite(),
+            $site,
             $parameters,
             'PATCH'
         );
