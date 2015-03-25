@@ -42,4 +42,14 @@ interface SiteHandlerInterface
      * @return SiteInterface
      */
     public function patch(SiteInterface $site, array $parameters);
+
+    /**
+     * Возвращает список сайтов
+     *
+     * @param int $limit
+     * @param int $offset
+     * @param null $orderBy
+     * @return array
+     */
+    public function all($limit = 5, $offset = 0, $orderBy = null);
 }

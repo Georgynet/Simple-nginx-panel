@@ -4,6 +4,7 @@ namespace Sllite\PanelBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use Sllite\PanelBundle\Exception\InvalidFormException;
@@ -118,6 +119,39 @@ class SiteController extends FOSRestController
     public function newSiteAction()
     {
         return $this->createForm(new SiteType());
+    }
+
+    /**
+     * Возвращает список сайтов.
+     *
+     * @Annotations\QueryParam(
+     *  name="offset",
+     *  requirements="\d+",
+     *  nullable=true,
+     *  description="Сдвиг с которого начинается выборка"
+     * )
+     *
+     * @Annotations\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=5,
+     *  description="Количество выбираемых сайтов"
+     * )
+     *
+     * @Annotations\View(
+     *  templateVar = "sites"
+     * )
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return array
+     */
+    public function getSitesAction(ParamFetcherInterface $paramFetcher)
+    {
+        $offset = $paramFetcher->get('offset');
+        $offset = null == $offset ? 0 : $offset;
+        $limit = $paramFetcher->get('limit');
+
+        return $this->container->get('sllite_panel.site.handler')->all($limit, $offset);
     }
 
     /**

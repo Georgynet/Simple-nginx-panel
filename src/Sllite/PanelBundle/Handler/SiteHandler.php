@@ -91,6 +91,14 @@ class SiteHandler implements SiteHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function all($limit = 5, $offset = 0, $orderBy = null)
+    {
+        return $this->repository->findBy([], $orderBy, $limit, $offset);
+    }
+
+    /**
      * Обработка формы.
      *
      * @param SiteInterface $site
