@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sllite_panel.site.handler" class="Sllite\PanelBundle\Handler\SiteHandler">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument>Sllite\PanelBundle\Entity\Site</argument>
+        </service>
+    </services>
+
+    <!--
+    <services>
+        <service id="sllite_panel.example" class="Sllite\PanelBundle\Example">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+</container>

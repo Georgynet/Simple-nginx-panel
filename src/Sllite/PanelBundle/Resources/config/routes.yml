@@ -1,0 +1,5 @@
+sllite_panel_Site:
+    type: rest
+    prefix: /
+    resource: Sllite\PanelBundle\Controller\SiteController
+    name_prefix: rest_
