@@ -94,3 +94,7 @@ fos_rest:
     access_denied_listener:
         json: true
     body_listener: true
+
+sllite_panel:
+    nginx:
+        sites_directory_root: %sites_directory_root%

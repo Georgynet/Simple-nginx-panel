@@ -93,9 +93,11 @@ class SiteController extends FOSRestController
     {
         try {
             /** @var SiteInterface $newSite */
-            $this->container->get('sllite_panel.site.handler')->createNew(
+            $newSite = $this->container->get('sllite_panel.site.handler')->createNew(
                 $request->request->all()
             );
+
+            $this->container->get('sllite_panel.nginx.handler')->createHost($newSite);
 
             return $this->routeRedirectView(
                 'main',
@@ -144,16 +146,20 @@ class SiteController extends FOSRestController
     public function saveEditSiteAction(Request $request, $id)
     {
         try {
+            $oldSite = clone $this->getIfExist($id);
+
             /** @var SiteInterface $site */
-            $site = $this->container->get('sllite_panel.site.handler')->edit(
+            $newSite = $this->container->get('sllite_panel.site.handler')->edit(
                 $this->getIfExist($id),
                 $request->request->all()
             );
 
+            $this->container->get('sllite_panel.nginx.handler')->changeHost($oldSite, $newSite);
+
             return $this->routeRedirectView(
                 'edit_site',
                 [
-                    'id' => $site->getId()
+                    'id' => $newSite->getId()
                 ],
                 Codes::HTTP_NO_CONTENT
             );

@@ -18,11 +18,17 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sllite_panel');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $treeBuilder
+            ->root('sllite_panel')
+            ->children()
+                ->arrayNode('nginx')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('sites_directory_root')->isRequired()->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
