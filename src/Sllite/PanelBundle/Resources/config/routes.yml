@@ -1,5 +1,9 @@
 sllite_panel_Site:
     type: rest
+    prefix: /api
+    resource: Sllite\PanelBundle\Controller\RestController
+    name_prefix: rest_
+
+sllite_panel_Site_html:
     prefix: /
     resource: Sllite\PanelBundle\Controller\SiteController
-    name_prefix: rest_

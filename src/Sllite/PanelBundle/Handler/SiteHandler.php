@@ -57,7 +57,7 @@ class SiteHandler implements SiteHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function post(array $parameters)
+    public function createNew(array $parameters)
     {
         return $this->processForm(
             $this->createSite(),
@@ -69,7 +69,7 @@ class SiteHandler implements SiteHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function put(SiteInterface $site, array $parameters)
+    public function editOrNew(SiteInterface $site, array $parameters)
     {
         return $this->processForm(
             $site,
@@ -81,7 +81,7 @@ class SiteHandler implements SiteHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function patch(SiteInterface $site, array $parameters)
+    public function edit(SiteInterface $site, array $parameters)
     {
         return $this->processForm(
             $site,

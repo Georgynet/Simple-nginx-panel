@@ -23,7 +23,7 @@ interface SiteHandlerInterface
      * @param array $parameters
      * @return SiteInterface
      */
-    public function post(array $parameters);
+    public function createNew(array $parameters);
 
     /**
      * Редактирует сайт или создаёт новый, если не существует.
@@ -32,7 +32,7 @@ interface SiteHandlerInterface
      * @param array $parameters
      * @return SiteInterface
      */
-    public function put(SiteInterface $site, array $parameters);
+    public function editOrNew(SiteInterface $site, array $parameters);
 
     /**
      * Редактирует сайт.
@@ -41,7 +41,7 @@ interface SiteHandlerInterface
      * @param array $parameters
      * @return SiteInterface
      */
-    public function patch(SiteInterface $site, array $parameters);
+    public function edit(SiteInterface $site, array $parameters);
 
     /**
      * Возвращает список сайтов

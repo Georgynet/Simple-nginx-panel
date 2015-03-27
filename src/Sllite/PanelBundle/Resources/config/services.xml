@@ -12,13 +12,4 @@
         </service>
     </services>
 
-    <!--
-    <services>
-        <service id="sllite_panel.example" class="Sllite\PanelBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
-        </service>
-    </services>
-    -->
 </container>
