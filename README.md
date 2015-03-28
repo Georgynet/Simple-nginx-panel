@@ -5,7 +5,7 @@
 
 1. Склонировать репозиторий
 <pre>
-git clone 
+git clone git@github.com:Georgynet/Simple-nginx-panel.git
 </pre>
 
 2. Запустить composer
