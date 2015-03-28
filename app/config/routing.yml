@@ -1,8 +1,8 @@
+sllite_site_panel:
+    prefix:   /
+    resource: "@SlliteSitePanelBundle/Resources/config/routes.yml"
+
 sllite_panel:
     type: rest
     prefix:   /
     resource: "@SllitePanelBundle/Resources/config/routes.yml"
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation

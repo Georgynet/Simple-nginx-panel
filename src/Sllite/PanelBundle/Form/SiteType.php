@@ -28,9 +28,9 @@ class SiteType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'Sllite\PanelBundle\Entity\Site'
-        ));
+        ]);
     }
 
     /**

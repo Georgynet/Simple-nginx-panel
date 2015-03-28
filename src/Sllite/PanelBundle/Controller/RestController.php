@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sllite\PanelBundle\Exception\InvalidFormException;
 use Sllite\PanelBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,14 @@ class RestController extends FOSRestController
     /**
      * Возвращает описание сайта.
      *
-     * @Annotations\View(templateVar="site")
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Возвращает информацию о сайте",
+     *   statusCodes = {
+     *     200 = "Возвращает в случае успеха",
+     *     400 = "Возвращает в случае ошибки"
+     *   }
+     * )
      *
      * @param int $id идентификатор сайта
      * @return SiteInterface
@@ -30,10 +38,13 @@ class RestController extends FOSRestController
     /**
      * Создаёт сайт.
      *
-     * @Annotations\View(
-     *  template = "SllitePanelBundle:Rest:newSite.html.twig",
-     *  statusCode = Codes::HTTP_BAD_REQUEST,
-     *  templateVar = "form"
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Создаёт новый сайт",
+     *   statusCodes = {
+     *     201 = "Возвращает в случае успеха",
+     *     400 = "Возвращает в случае ошибки"
+     *   }
      * )
      *
      * @param Request $request
@@ -48,6 +59,8 @@ class RestController extends FOSRestController
             $newSite = $this->container->get('sllite_panel.site.handler')->createNew(
                 $request->request->all()
             );
+
+            $this->container->get('sllite_panel.nginx.handler')->createHost($newSite);
 
             return $this->routeRedirectView(
                 'rest_get_site',
@@ -65,9 +78,14 @@ class RestController extends FOSRestController
     /**
      * Обновляет сущесвующий сайт или создаёт новый.
      *
-     * @Annotations\View(
-     *  template = "SllitePanelBundle:Rest:editSite.html.twig",
-     *  templateVar = "form"
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Обновляет информацию о существующем или создаёт новый сайт",
+     *   statusCodes = {
+     *     201 = "Возвращает в случае успешного создания",
+     *     204 = "Возвращает в случае успешного редактирования",
+     *     400 = "Возвращает в случае ошибки"
+     *   }
      * )
      *
      * @param Request $request
@@ -82,17 +100,22 @@ class RestController extends FOSRestController
             $site = $this->container->get('sllite_panel.site.handler')->get($id);
 
             if ($site instanceof SiteInterface) {
+                $oldSite = clone $site;
+
                 $statusCode = Codes::HTTP_NO_CONTENT;
-                $this->container->get('sllite_panel.site.handler')->editOrNew(
+                $newSite = $this->container->get('sllite_panel.site.handler')->editOrNew(
                     $site,
                     $request->request->all()
                 );
 
+                $this->container->get('sllite_panel.nginx.handler')->changeHost($oldSite, $newSite);
             } else {
                 $statusCode = Codes::HTTP_CREATED;
                 $site = $this->container->get('sllite_panel.site.handler')->createNew(
                     $request->request->all()
                 );
+
+                $this->container->get('sllite_panel.nginx.handler')->createHost($site);
             }
 
             return $this->routeRedirectView(
@@ -111,9 +134,13 @@ class RestController extends FOSRestController
     /**
      * Редактирует сайт.
      *
-     * @Annotations\View(
-     *  template="SllitePanelBundle:Rest:editSite.html.twig",
-     *  templateVar="form"
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Редактирует информацию о сайте",
+     *   statusCodes = {
+     *     204 = "Возвращает в случае успеха",
+     *     400 = "Возвращает в случае ошибки"
+     *   }
      * )
      *
      * @param Request $request
@@ -126,16 +153,20 @@ class RestController extends FOSRestController
     public function patchSiteAction(Request $request, $id)
     {
         try {
-            /** @var SiteInterface $site */
-            $site = $this->container->get('sllite_panel.site.handler')->edit(
+            $oldSite = clone $this->getIfExist($id);
+
+            /** @var SiteInterface $newSite */
+            $newSite = $this->container->get('sllite_panel.site.handler')->edit(
                 $this->getIfExist($id),
                 $request->request->all()
             );
 
+            $this->container->get('sllite_panel.nginx.handler')->changeHost($oldSite, $newSite);
+
             return $this->routeRedirectView(
                 'rest_get_site',
                 [
-                    'id' => $site->getId(),
+                    'id' => $newSite->getId(),
                     '_format' => $request->get('_format')
                 ],
                 Codes::HTTP_NO_CONTENT
@@ -147,6 +178,15 @@ class RestController extends FOSRestController
 
     /**
      * Возвращает список сайтов.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Возвращает список сайтов",
+     *   statusCodes = {
+     *     200 = "Возвращает в случае успеха",
+     *     400 = "Возвращает в случае ошибки"
+     *   }
+     * )
      *
      * @Annotations\QueryParam(
      *  name="offset",
@@ -160,10 +200,6 @@ class RestController extends FOSRestController
      *  requirements="\d+",
      *  default=5,
      *  description="Количество выбираемых сайтов"
-     * )
-     *
-     * @Annotations\View(
-     *  templateVar = "sites"
      * )
      *
      * @param ParamFetcherInterface $paramFetcher

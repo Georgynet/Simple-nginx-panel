@@ -31,21 +31,10 @@ class NginxHandler implements WebServerHandlerInterface
      */
     public function createHost(SiteInterface $site)
     {
-        $hostPath = $this->nginxSettings['sites_directory_root'] . $site->getDomain();
+        $hostPath = $this->getSitesDirectory() . $site->getDomain();
         $this->filesystem->mkdir($hostPath, 0755);
         $this->filesystem->touch($hostPath . '/index.html');
         file_put_contents($hostPath . '/index.html', $site->getDomain());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteHost(SiteInterface $site)
-    {
-        $hostDirRoot = Finder::create()->in(
-            $this->nginxSettings['sites_directory_root'] . $site->getDomain()
-        );
-        $this->filesystem->remove($hostDirRoot);
     }
 
     /**
@@ -58,8 +47,16 @@ class NginxHandler implements WebServerHandlerInterface
         }
 
         $this->filesystem->rename(
-            $this->nginxSettings['sites_directory_root'] . $oldSite->getDomain(),
-            $this->nginxSettings['sites_directory_root'] . $newSite->getDomain()
+            $this->getSitesDirectory() . $oldSite->getDomain(),
+            $this->getSitesDirectory() . $newSite->getDomain()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitesDirectory()
+    {
+        return $this->nginxSettings['sites_directory_root'];
     }
 }

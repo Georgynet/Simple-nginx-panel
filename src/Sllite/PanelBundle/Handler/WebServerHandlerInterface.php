@@ -26,9 +26,8 @@ interface WebServerHandlerInterface
     public function changeHost(SiteInterface $oldSite, SiteInterface $newSite);
 
     /**
-     * Удаляет хост.
-     * @param SiteInterface $site сайт
-     * @return mixed
+     * Возвращает путь до директории, в которой хранятся домены.
+     * @return String
      */
-    public function deleteHost(SiteInterface $site);
+    public function getSitesDirectory();
 }

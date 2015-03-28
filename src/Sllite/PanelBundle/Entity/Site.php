@@ -32,7 +32,7 @@ class Site implements SiteInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="domain", type="string", length=255)
+     * @ORM\Column(name="domain", type="string", length=255, unique=true)
      */
     private $domain;
 

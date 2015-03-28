@@ -1,0 +1,3 @@
+sllite_panel_site_html:
+    prefix: /
+    resource: Sllite\SitePanelBundle\Controller\SiteController

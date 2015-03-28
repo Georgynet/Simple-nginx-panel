@@ -4,20 +4,28 @@ namespace Sllite\PanelBundle\Tests\Controller;
 
 use FOS\RestBundle\Util\Codes;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Sllite\PanelBundle\Handler\NginxHandler;
 use Sllite\PanelBundle\Model\SiteInterface;
 use Sllite\PanelBundle\Tests\Fixtures\Entity\LoadSiteData;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
-class SiteControllerTest extends WebTestCase
+class RestControllerTest extends WebTestCase
 {
     /**
      * @var Client
      */
     private $client;
+    /**
+     * @var Filesystem
+     */
+    private $fs;
 
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->fs = new Filesystem();
     }
 
     public function testGetSiteSuccessful()
@@ -47,7 +55,7 @@ class SiteControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('rest_get_site', ['id' => '10', '_format' => 'json']),
+            $this->getUrl('rest_get_site', ['id' => '0', '_format' => 'json']),
             ['ACCEPT' => 'application/json']
         );
 
@@ -66,6 +74,9 @@ class SiteControllerTest extends WebTestCase
         );
 
         $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+
+        $domainsRoot = $this->getContainer()->get('sllite_panel.nginx.handler')->getSitesDirectory();
+        $this->assertTrue($this->fs->exists($domainsRoot . '/new-site.local'));
     }
 
     public function testCreateSiteFail()
@@ -80,6 +91,9 @@ class SiteControllerTest extends WebTestCase
         );
 
         $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+
+        $domainsRoot = $this->getContainer()->get('sllite_panel.nginx.handler')->getSitesDirectory();
+        $this->assertFalse($this->fs->exists($domainsRoot . '/test.local'));
     }
 
     public function testPutSiteModify()
@@ -114,8 +128,12 @@ class SiteControllerTest extends WebTestCase
 
         $this->assertEquals(
             Codes::HTTP_NO_CONTENT,
-            $this->client->getResponse()->getStatusCode()
+            $this->client->getResponse()->getStatusCode(),
+            $this->client->getResponse()->getContent()
         );
+
+        $domainsRoot = $this->getContainer()->get('sllite_panel.nginx.handler')->getSitesDirectory();
+        $this->assertTrue($this->fs->exists($domainsRoot . '/domain-after-put.local'));
 
         $this->assertTrue(
             $this->client->getResponse()->headers->contains(
@@ -141,6 +159,14 @@ class SiteControllerTest extends WebTestCase
             $this->client->getResponse()->getContent()
         );
 
+        $domainsRoot = $this->getContainer()->get('sllite_panel.nginx.handler')->getSitesDirectory();
+        if ($this->fs->exists($domainsRoot . '/domain-after-put.local')) {
+            $this->fs->remove($domainsRoot . '/domain-after-put.local');
+        }
+        if (!$this->fs->exists($domainsRoot . '/test-site.local')) {
+            $this->fs->mkdir($domainsRoot . '/test-site.local');
+        }
+
         $this->client->request(
             'PUT',
             $this->getUrl('rest_put_site', ['id' => $id, '_format' => 'json']),
@@ -149,6 +175,8 @@ class SiteControllerTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             '{"name" : "name-after-create", "domain" : "domain-after-create.local"}'
         );
+
+        $this->assertTrue($this->fs->exists($domainsRoot . '/domain-after-create.local'));
 
         $this->assertEquals(
             Codes::HTTP_CREATED,

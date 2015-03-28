@@ -1,0 +1,30 @@
+{% extends "SlliteSitePanelBundle::layout.html.twig" %}
+
+{% block content %}
+    <h1 class="title">Список сайтов</h1>
+
+    <p><a href="{{ path('new_site_form') }}">Создать сайт</a></p>
+
+    {% for site in sites %}
+        <div>
+            <p>ID: {{ site.id }}</p>
+            <p>Перейти: <a href="//{{ site.domain }}">{{ site.name }}</a></p>
+            <p><a href="{{ path('edit_site', {'id': site.id}) }}">подробнее</a></p>
+        </div>
+    {% endfor %}
+
+    <p>
+        <b>Страницы:</b>
+        {% if offset != 0 %}
+            <a href="{{ path('main') }}?offset={{ offset - limit }}">Назад</a>
+        {% else %}
+            Назад
+        {% endif %}
+        |
+        {% if hasNext %}
+            <a href="{{ path('main') }}?offset={{ offset + limit }}">Дальше</a>
+        {% else %}
+            Дальше
+        {% endif %}
+    </p>
+{% endblock %}

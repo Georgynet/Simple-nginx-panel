@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 27.03.2015
- * Time: 14:03
- */
 
-namespace Sllite\PanelBundle\Controller;
+namespace Sllite\SitePanelBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -83,13 +77,17 @@ class SiteController extends FOSRestController
      *
      * @Route("/new", name="new_site", methods="post")
      *
-     * @param Request $request
+     * @Annotations\View(
+     *  template="SllitePanelBundle:Site:newSite.html.twig",
+     *  templateVar="form"
+     * )
      *
+     * @param Request $request
      * @return View|array|null
      *
      * @throws InvalidFormException в случае, если форма невалидная
      */
-    public function saveNewSite(Request $request)
+    public function saveNewSiteAction(Request $request)
     {
         try {
             /** @var SiteInterface $newSite */
@@ -148,7 +146,7 @@ class SiteController extends FOSRestController
         try {
             $oldSite = clone $this->getIfExist($id);
 
-            /** @var SiteInterface $site */
+            /** @var SiteInterface $newSite */
             $newSite = $this->container->get('sllite_panel.site.handler')->edit(
                 $this->getIfExist($id),
                 $request->request->all()

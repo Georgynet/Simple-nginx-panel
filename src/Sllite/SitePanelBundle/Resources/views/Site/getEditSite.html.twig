@@ -1,0 +1,21 @@
+{% extends "SlliteSitePanelBundle::layout.html.twig" %}
+
+{% block content %}
+    {%  if (form is not null) %}
+        <h1 class="title">Редактировать сайт</h1>
+
+        <p><a href="{{ path('main') }}">На главную</a></p>
+
+        <form action="{{ url('save_site', {'id' : id}) }}" method="POST" {{ form_enctype(form) }} id="login">
+            {{ form_widget(form) }}
+
+            <button type="submit" class="sf-button">
+                <span class="border-l">
+                    <span class="border-r">
+                        <span class="btn-bg">Изменить</span>
+                    </span>
+                </span>
+            </button>
+        </form>
+    {%  endif %}
+{% endblock %}
