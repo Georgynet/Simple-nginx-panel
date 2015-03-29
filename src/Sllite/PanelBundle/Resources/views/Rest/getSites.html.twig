@@ -1,8 +1,0 @@
-<h1>Список сайтов</h1>
-{% for site in sites %}
-    <div>
-        <p>ID: {{ site.id }}</p>
-        <p>Перейти: <a href="//{{ site.domain }}">{{ site.name }}</a></p>
-        <p><a href="{{ path('rest_get_site', {'id': site.id}) }}">подробнее</a></p>
-    </div>
-{% endfor %}
