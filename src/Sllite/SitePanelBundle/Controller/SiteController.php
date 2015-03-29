@@ -78,7 +78,7 @@ class SiteController extends FOSRestController
      * @Route("/new", name="new_site", methods="post")
      *
      * @Annotations\View(
-     *  template="SllitePanelBundle:Site:newSite.html.twig",
+     *  template="SlliteSitePanelBundle:Site:newSite.html.twig",
      *  templateVar="form"
      * )
      *
@@ -133,7 +133,7 @@ class SiteController extends FOSRestController
      * @Route("/edit/{id}", name="save_site", methods="post")
      *
      * @Annotations\View(
-     *  template="SllitePanelBundle:Site:getEditSite.html.twig",
+     *  template="SlliteSitePanelBundle:Site:getEditSite.html.twig",
      *  templateVar="form"
      * )
      *
