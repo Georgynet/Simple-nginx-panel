@@ -4,7 +4,6 @@ namespace Sllite\PanelBundle\Handler;
 
 use Sllite\PanelBundle\Model\SiteInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Handler для работы с web-сервером Nginx.
