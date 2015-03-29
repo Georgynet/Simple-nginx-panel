@@ -13,12 +13,4 @@ Sllite\PanelBundle\Entity\Site:
         domain:
             - NotBlank: ~
             - NotNull: ~
-#            - Length:
-#                min: 1
-#                max: 255
-#                minMessage: "Вы ввели очень короткое доменное имя"
-#                maxMessage: "Вы ввели очень длинное доменное имя"
-            - Regex:
-                pattern: "/([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}/"
-                match: true
-                message: "Введён неправильный домен"
+            - Sllite\PanelBundle\Validator\Constraints\Domain: ~
