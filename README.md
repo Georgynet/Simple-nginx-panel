@@ -15,7 +15,7 @@ composer install
 
 3. Настроить конфигурацию БД в файле:
 <pre>
-/home/georgy/htdocs/fastvps/www/panel/app/config/parameters.yml
+/app/config/parameters.yml
 </pre>
 
 4. Создать БД, выполнив команды:
